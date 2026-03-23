@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Chat</h1>
+
+<div id="messages" class="chat-box"></div>
+
+<div class="row">
+  <input id="input" type="text" placeholder="Type a message..." autocomplete="off" />
+  <button onclick="sendMsg()">Send</button>
+  <button onclick="nextStory()">Next</button>
+  <button class="danger" onclick="resetChat()">Reset</button>
+</div>
+
+<div class="row" style="margin-top:10px;">
+  <button onclick="setMode('chat')">Chat Mode</button>
+  <button onclick="setMode('story_interactive')">Story (Interactive)</button>
+  <button onclick="setMode('story_read')">Story (Read Only)</button>
+</div>
+
+<script>
+function escapeHtml(str) {
+  return (str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function addMsg(who, text) {
+  const messages = document.getElementById("messages");
+  const cls = who === "You" ? "user" : "ai";
+  messages.innerHTML += `<div class="bubble ${cls}"><strong>${who}</strong><p>${escapeHtml(text)}</p></div>`;
+  messages.scrollTop = messages.scrollHeight;
+}
+
+async function sendMsg(allowEmpty=false) {
+  const input = document.getElementById("input");
+  const text = input.value.trim();
+
+  if (!text && !allowEmpty) return;
+  input.value = "";
+
+  if (text) addMsg("You", text);
+
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({message: text})
+  });
+
+  const data = await res.json();
+  addMsg("Nova", data.reply);
+}
+
+async function nextStory() {
+  await sendMsg(true); // allow empty to advance read-only story
+}
+
+async function setMode(mode) {
+  await fetch("/api/mode", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({mode})
+  });
+  addMsg("Nova", `Mode switched to ${mode}.`);
+}
+
+async function resetChat() {
+  await fetch("/api/chat/reset", { method: "POST" });
+  document.getElementById("messages").innerHTML = "";
+  addMsg("Nova", "Reset complete.");
+}
+
+// optional: show intro on load
+window.addEventListener("load", async () => {
+  const res = await fetch("/api/chat/intro");
+  if (res.ok) {
+    const data = await res.json();
+    addMsg("Nova", data.reply);
+  } else {
+    addMsg("Nova", "Ready.");
+  }
+});
+</script>
+
+{% endblock %}

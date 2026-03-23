@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="chat-head">
+    <h1>{{ player.name }} the {{ player.job }}</h1>
+    <form action="/games/rpg/reset" method="post">
+      <button class="btn secondary" type="submit">Reset</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h2>Status</h2>
+    <p><strong>Your HP:</strong> {{ pbar }}</p>
+    <p><strong>Gold:</strong> {{ player.gold }}</p>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h2>Enemy</h2>
+    <p><strong>{{ enemy.name }}</strong></p>
+    <p><strong>Enemy HP:</strong> {{ ebar }}</p>
+
+    <form method="post" style="margin-top:10px;">
+      <button class="btn" type="submit">Attack</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h2>Battle Log</h2>
+    <ul>
+      {% for line in player.log[-10:] %}
+        <li>{{ line }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <p style="margin-top:12px;"><a href="/games">← Back to Games</a></p>
+{% endblock %}

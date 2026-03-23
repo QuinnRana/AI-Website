@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Start Text RPG</h1>
+  <p class="muted">Create your hero.</p>
+
+  <form method="post" class="chat-form">
+    <input name="name" placeholder="Hero name" required />
+    <select name="job">
+      {% for c in classes %}
+        <option value="{{ c }}">{{ c }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn" type="submit">Begin</button>
+  </form>
+
+  <p class="muted small">Tip: You can reset anytime from the battle screen.</p>
+{% endblock %}

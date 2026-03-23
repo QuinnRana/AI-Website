@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="chat-head">
+    <h1>Recordings / Transcriptions</h1>
+    <a class="btn secondary" href="/record">New Recording</a>
+  </div>
+
+  {% if items|length == 0 %}
+    <p class="muted" style="margin-top:12px;">No recordings yet.</p>
+  {% else %}
+    <div style="margin-top:12px; display:grid; gap:12px;">
+      {% for r in items %}
+        <div class="card">
+          <h2 style="margin:0 0 6px 0;">{{ r.title or r.id }}</h2>
+          <p class="muted small" style="margin:0 0 10px 0;">
+            Saved: {{ r.created_at }} • File: {{ r.filename }}
+          </p>
+
+          <audio controls style="width:100%;">
+            <source src="/recordings/file/{{ r.filename }}">
+          </audio>
+
+          <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+            <a class="btn secondary" href="/recordings/file/{{ r.filename }}" download>Download</a>
+            <a class="btn secondary" href="/recordings/{{ r.id }}">Details</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

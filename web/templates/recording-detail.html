@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="chat-head">
+    <h1>Recording Details</h1>
+    <a class="btn secondary" href="/recordings">Back</a>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h2 style="margin-top:0;">{{ item.title or item.id }}</h2>
+    <p class="muted small">ID: {{ item.id }}</p>
+    <p class="muted small">Saved: {{ item.created_at }}</p>
+
+    <audio controls style="width:100%; margin-top:10px;">
+      <source src="/recordings/file/{{ item.filename }}">
+    </audio>
+
+    <div class="card" style="margin-top:12px;">
+      <h3 style="margin-top:0;">Transcript</h3>
+      {% if transcript %}
+        <pre style="white-space:pre-wrap; margin:0;">{{ transcript }}</pre>
+      {% else %}
+        <p class="muted">No transcript yet.</p>
+      {% endif %}
+
+      <form action="/recordings/{{ item.id }}/transcribe" method="post" style="margin-top:10px;">
+        <button class="btn" type="submit">Generate Transcript (coming next)</button>
+      </form>
+    </div>
+
+    <form action="/recordings/{{ item.id }}/delete" method="post" style="margin-top:12px;">
+      <button class="btn secondary" type="submit">Delete Recording</button>
+    </form>
+  </div>
+{% endblock %}

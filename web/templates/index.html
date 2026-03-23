@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Main Menu</h1>
+  <p class="muted">Choose what you want to do.</p>
+
+  <div class="grid">
+    <a class="card" href="/games">
+      <h2>Games</h2>
+      <p>Text RPG, future minigames</p>
+    </a>
+
+    <a class="card" href="/chat">
+      <h2>Just Chatting</h2>
+      <p>Talk with {{ ai_name }}</p>
+    </a>
+
+    <a class="card" href="/record">
+      <h2>Record</h2>
+      <p>Voice recording (coming soon)</p>
+    </a>
+
+    <a class="card" href="/recordings">
+      <h2>Recordings / Transcriptions</h2>
+      <p>Browse & search (coming soon)</p>
+    </a>
+
+    <a class="card" href="/music">
+      <h2>Music</h2>
+      <p>Player & playlists (coming soon)</p>
+    </a>
+  </div>
+{% endblock %}

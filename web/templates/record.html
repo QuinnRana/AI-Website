@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Record</h1>
+  <p class="muted">Record audio on your phone or computer, then upload it.</p>
+
+  <div class="card" style="margin-top:12px;">
+    <label class="muted small">Optional title</label>
+    <input id="title" placeholder="e.g., Nov 2 lecture notes" style="width:100%; margin-top:8px;" />
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn" id="startBtn">Start</button>
+      <button class="btn secondary" id="stopBtn">Stop</button>
+      <button class="btn" id="uploadBtn">Upload</button>
+    </div>
+
+    <p id="status" class="muted" style="margin-top:10px;">Ready.</p>
+
+    <audio id="playback" controls style="display:none; width:100%; margin-top:10px;"></audio>
+  </div>
+
+  <p style="margin-top:12px;"><a href="/recordings">Go to Recordings →</a></p>
+
+  <script src="{{ url_for('static', filename='recorder.js') }}"></script>
+{% endblock %}
